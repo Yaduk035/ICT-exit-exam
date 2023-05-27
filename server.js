@@ -2,8 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-const path = require('path');
-
+const path = require('path'); // Import the path module
 
 // Connect to MongoDB Atlas
 mongoose.connect('mongodb+srv://yaduk946:genericpwd.@cluster0.bygqnjf.mongodb.net/otp?retryWrites=true&w=majority', {
@@ -31,13 +30,8 @@ app.use(express.json());
 // Enable CORS
 app.use(cors());
 
-// Serve the static files from the React build folder
-app.use(express.static(path.join(__dirname, 'build')));
-
-// GET request handler for serving the React app
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'src','build', 'index.html'));
-});
+// Serve static files from the build directory
+app.use(express.static(path.join(__dirname, 'src', 'build')));
 
 // GET request handler
 app.get('/data', async (req, res) => {
@@ -61,14 +55,14 @@ app.post('/data', async (req, res) => {
     await newData.save();
 
     const transporter = nodemailer.createTransport({
-        host: 'smtp-mail.outlook.com',
-        port: 587,
-        secure: false,
-        auth: {
-          user: 'yadukrishna035@outlook.com', // Replace with your Outlook email address
-          pass: 'maestroyadu.' // Replace with your Outlook password
-        }
-      });
+      host: 'smtp-mail.outlook.com',
+      port: 587,
+      secure: false,
+      auth: {
+        user: 'yadukrishna035@outlook.com', // Replace with your Outlook email address
+        pass: 'maestroyadu.' // Replace with your Outlook password
+      }
+    });
 
     const mailOptions = {
       from: 'your-email',
@@ -90,6 +84,11 @@ app.post('/data', async (req, res) => {
     console.log('Error saving data:', error);
     res.status(500).json({ error: 'Error saving data' });
   }
+});
+
+// Serve the React app for any other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'src', 'build', 'index.html'));
 });
 
 // Start the server
