@@ -55,23 +55,21 @@ app.post('/data', async (req, res) => {
     await newData.save();
 
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
+      host: 'smtp-mail.outlook.com',
       port: 587,
       secure: false,
       auth: {
-        user: 'yaduk946@gmail.com', 
-        pass: 'jjrpaoqeaiwgslbj' 
+        user: 'yadukrishna035@outlook.com', // Replace with your Outlook email address
+        pass: 'maestroyadu.' // Replace with your Outlook password
       }
     });
 
-  const mailOptions = {
-      from: 'Yadukrishna',
-      to: newData.username, // Assuming the email is passed in the request body
+    const mailOptions = {
+      from: 'your-email',
+      to: req.body.username, // Assuming the email is passed in the request body
       subject: 'OTP Verification',
-      text: `Thank you for choosing our service,
-      Your OTP is: ${req.body.otp}` // Assuming the OTP is passed in the request body
+      text: `Your OTP is: ${req.body.otp}` // Assuming the OTP is passed in the request body
     };
-
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
