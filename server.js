@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const path = require('path');
+
 
 // Connect to MongoDB Atlas
 mongoose.connect('mongodb+srv://yaduk946:genericpwd.@cluster0.bygqnjf.mongodb.net/otp?retryWrites=true&w=majority', {
@@ -28,6 +30,14 @@ app.use(express.json());
 
 // Enable CORS
 app.use(cors());
+
+// Serve the static files from the React build folder
+app.use(express.static(path.join(__dirname, 'build')));
+
+// GET request handler for serving the React app
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'src','build', 'index.html'));
+});
 
 // GET request handler
 app.get('/data', async (req, res) => {
